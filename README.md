@@ -1,18 +1,18 @@
-# Non-blocking MPU9250 Arduino Due DMP IMU Driver
-This project reduces the communication time of a publicly available MPU9250 MPU IMU library from 1ms to 23 us.  
+# Arduino Due non-blocking I2C communication library using PDC (peripheral DMA controller) 
+An Arduino Due with a ATSAM3X8E ARM Cortex-M3 CPU has the capability of using its hardware Peripheral DMA Controller (PDC, DMA=Direct Memory Access) to handle I2C communication without user intervension. This library allows the microcontroller to run other tasks concurrently, while waiting for the I2C communications to complete.
 
 ## Background
 The default Wire library in Arduino always reads and writes to the I2C bus in a blocking fashion. The behavior is adapted for almost all MPU IMU driver for Arduino I can find online.  However, the communication can take up to 1ms for a MPU9250 simple sensor read. This is a very long time for higher-performance chip such as ATSAM3X and is often critical for time-sensitive application such as robotic control. Further more, the Wire library on Arduino Due is somewhat unstable, and will sometimes stuck without returning if the I2C bus hangs at the last transmission bit.  
 To resolve the issue, the ATMEL MCU architecture come to the rescue. The chip ATSAM3X used in the Arduino Due came with a hardware I2C controller (they call it the two wire interface, or TWI for legal reasons). This hardware controller can handle the I2C communication all by itself even the complicated "Repeated Start" process during slave read communication. This functionality of hardware controlled communication is often refered as DMA, or "Diret Memory Access". And the ATMEL names the hardware "Peripheral DMA Controller", or PDC on the two wire interface.  
   
 ## Installation
-1. Arduino IDE: [Linux](https://www.arduino.cc/en/guide/linux), [Windows]()
+1. Arduino IDE: [Linux](https://www.arduino.cc/en/guide/linux), [Windows](https://www.arduino.cc/en/guide/windows)
 2. In IDE Tools->Board->Board manager, search "due" and install the Arduino SAM Boards (32-bit Cortex M3)
 3. Change board to Arduinoi Due (programming port)
-4. Clone this project 
+4. Install this project as an Arduino library
     ```
-    cd ~/Arduino/
-    git clone https://github.com/EwingKang/arduino_pdc_i2c.git
+    cd ~/Arduino/libraries
+    git clone https://github.com/EwingKang/Due_I2C_PDC.git
     ```
 5. Build the project with IDE
 
