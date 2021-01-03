@@ -23,6 +23,8 @@ Not in particular order
 - [ ] Remove all Serial.print within lib
 - [x] Access guards for half-duplex dependent on status
 - [x] Comm queue? buffers? (use DMA copy?)
+- [ ] Second TWI channel support
+- [ ] Better design to make sure there's only one instance controlling the hardware
 
 ## Changelog
 #### v1.0
