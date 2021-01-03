@@ -25,6 +25,7 @@ Not in particular order
 - [x] Comm queue? buffers? (use DMA copy?)
 - [ ] Second TWI channel support
 - [ ] Better design to make sure there's only one instance controlling the hardware
+- [ ] Fix I2C_Bus_test in examples
 
 ## Changelog
 #### v1.0
