@@ -1,0 +1,46 @@
+#######################################
+# Syntax Coloring Map For Due I2C PDC library
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+PdcTwi	KEYWORD1
+PdcTwoWireStatus	KEYWORD1
+I2cBus	KEYWORD1
+I2cBusStatus KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+Init	KEYWORD2
+Reset	KEYWORD2
+End	KEYWORD2
+SendTo	KEYWORD2
+RecieveFrom	KEYWORD2
+WriteTo	KEYWORD2
+ReadFrom	KEYWORD2
+TxComplete	KEYWORD2
+RxComplete	KEYWORD2
+ResetStatus	KEYWORD2
+IsrHandler	KEYWORD2
+
+Begin	KEYWORD2
+Reset	KEYWORD2
+IsAvailable	KEYWORD2
+WriteReg	KEYWORD2
+WriteRegIsFinished	KEYWORD2
+WriteRegBlocked	KEYWORD2
+ReadReg	KEYWORD2
+UpdateReadReg	KEYWORD2
+FetchRegReadData	KEYWORD2
+ReadRegBlocked	KEYWORD2
+IsrHandler	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+
