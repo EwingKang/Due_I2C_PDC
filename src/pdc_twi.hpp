@@ -98,7 +98,7 @@ public:
 		// setup vector interrupt controller
 		NVIC_DisableIRQ(TWI1_IRQn);
 		NVIC_ClearPendingIRQ(TWI1_IRQn);
-		NVIC_SetPriority(TWI1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 3, 3));
+		NVIC_SetPriority(TWI1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 4, 3));
 		NVIC_EnableIRQ(TWI1_IRQn);
 		
 		TWI1->TWI_PTCR = TWI_PTCR_RXTDIS | TWI_PTCR_TXTDIS;	// Disable PDC channel
@@ -108,7 +108,7 @@ public:
 		_comm_st = PdcTwoWireStatus::PDC_STDBY;
 	}
 	
-	//This function will blocked for ~15ms
+	//This function will block for ~15ms
 	void Reset()
 	{
 		End();		//Disable TWI functions, blocked for 12ms

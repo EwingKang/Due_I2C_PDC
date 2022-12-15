@@ -10,6 +10,7 @@ PdcTwi	KEYWORD1
 PdcTwoWireStatus	KEYWORD1
 I2cBus	KEYWORD1
 I2cBusStatus KEYWORD1
+DmaSpi KEYWORD1
 
 
 #######################################
