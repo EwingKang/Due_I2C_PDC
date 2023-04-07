@@ -28,7 +28,7 @@
 #define DATA_LEN 6			// 6-byte
 
 PdcTwi i2c;
-//volatile PdcTwi::PdcTwoWireStatus PdcTwi::master_state = PdcTwoWireStatus::PDC_UNINIT;
+
 
 void setup() {
 	SerialUSB.begin(115200);
@@ -47,9 +47,9 @@ void setup() {
 	static uint8_t wai_reg = ADXL345_WHO_AM_I;
 	static uint8_t rtn = 0;
 
-	i2c.WriteTo(ADXL234, &wai_reg, 1);
+	i2c.SendTo(ADXL234, &wai_reg, 1);
 	while( !i2c.TxComplete() );				// blocked while transfering	
-	i2c.ReadFrom(ADXL234, &rtn, 1);
+	i2c.RecieveFrom(ADXL234, &rtn, 1);
 	while( !i2c.RxComplete() );
 	
 	Serial.print("Test1 rtn: ");
@@ -70,7 +70,7 @@ void setup() {
 	static uint8_t rtn1[10];
 	static uint8_t en_meas_pkt[3]= {ADXL345_PWR_CTL_RA, 0x08}; // register address , EN_MEAS
 	
-	i2c.WriteTo(ADXL234, en_meas_pkt, 2);
+	i2c.SendTo(ADXL234, en_meas_pkt, 2);
 	while( !i2c.TxComplete() );				// blocked while transfering	
 	Serial.println("ADXL234 Started");
 	Serial.println("---------------------");
@@ -86,10 +86,10 @@ void setup() {
 	// reading action: [write desired address] -> [read]
 	static uint8_t data0_addr = ADXL345_DATAX0;
 	
-	i2c.WriteTo(ADXL234, &data0_addr, 1);
+	i2c.SendTo(ADXL234, &data0_addr, 1);
 	while( !i2c.TxComplete() );			// blocked while transfering
 	Serial.println("read");
-	i2c.ReadFrom(ADXL234, rtn1, 2);
+	i2c.RecieveFrom(ADXL234, rtn1, 2);
 	long us1 = micros();
 	while( !i2c.RxComplete() );			// blocked while recieving
 	long us2 = micros();	
@@ -111,6 +111,22 @@ void setup() {
 	Serial.print(", t3:");
 	Serial.println(us3);*/	
 	Serial.println("---------------------");
+	
+	
+	//============ test4: direct multi read ================
+	Serial.println("Test4 Start");
+	Serial.println("Direct multi read");
+	
+	delay(200); // for serial to write
+	static uint8_t rtn4[10] = {0};
+	i2c.ReadFrom(ADXL234, data0_addr, rtn4, 2);
+	while( !i2c.RxComplete() );			// blocked while recieving
+	Serial.println("---------------------");
+	Serial.println("Test4 rtn: ");
+	for(int k=0;k<10;k++) {
+		Serial.print(rtn1[k], HEX);
+		Serial.print(", ");
+	}
 	delay(2000);
 	
 	//Serial.println("========= End Dma test ==========");
@@ -124,9 +140,9 @@ void loop() {
 	delay(1000);
 	
 	// read accel data
-	i2c.WriteTo(ADXL234, &data0_addr, 1);
+	i2c.SendTo(ADXL234, &data0_addr, 1);
 	while( !i2c.TxComplete() );			// blocked while transfering
-	i2c.ReadFrom(ADXL234, rtn2, 6);
+	i2c.RecieveFrom(ADXL234, rtn2, 6);
 	while( !i2c.RxComplete() );			// blocked while recieving
 	int16_t ax = (int16_t)rtn2[0] + ((int16_t)rtn2[1] << 8);
 	int16_t ay = (int16_t)rtn2[2] + ((int16_t)rtn2[3] << 8);

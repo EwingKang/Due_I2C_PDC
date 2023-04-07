@@ -10,7 +10,7 @@
 ******************************************************************************/
 
 #include <Arduino.h>
-#include "include/i2c_bus.hpp"
+#include "i2c_bus.hpp"
 
 //#define DeviceID                0x34
 //#define DeviceAddress           0x68		//MPU6050 
@@ -28,7 +28,6 @@
 #define DATA_LEN 6			// 6-byte
 
 I2cBus i2c_bus;
-int accelerometer, gyro_id;
 
 void setup() {
 	SerialUSB.begin(115200);
@@ -40,22 +39,21 @@ void setup() {
 	
 	//============ test1: single write read ================
 	Serial.println("Test1 Start");
-	accelerometer = i2c_bus.Add_Device(ADXL345);
 	delay(200); 							// for serial to write
 	
 	uint8_t rtn = 3;
 	int res;
 	
-	res = i2c_bus.GetReg(accelerometer, ADXL345_WHO_AM_I, 1);
+	res = i2c_bus.ReadReg(ADXL345, ADXL345_WHO_AM_I, 1);
 	Serial.print(res);
 	do
 	{
-		res = i2c_bus.UpdateGetReg();
+		res = i2c_bus.UpdateReadReg();
 		//Serial.println(res);
 	}while(res<4);
 	
 	Serial.print("fetch: ");
-	Serial.print( i2c_bus.FetchRegData(&rtn, 1) );
+	Serial.print( i2c_bus.FetchRegReadData(&rtn, 1) );
 	Serial.print("Test1 rtn: ");
 	Serial.println(rtn, HEX);
 	Serial.println("---------------------");
@@ -64,16 +62,16 @@ void setup() {
 	
 	//============ test2: multi write ================
 	Serial.println("Test2 Start");
-	Serial.println("Set ADXL345 to measure +- 4G: Blocking SetReg");
+	Serial.println("Set ADXL345 to measure +- 4G: Blocking WriteReg");
 	delay(200); // for serial to write
 	
 	//Put the ADXL345 into +/- 4G range by writing the value 0x01 to the DATA_FORMAT register.
-	i2c_bus.SetRegBlocked(accelerometer, 0x31, 0x01, 2);	// 2ms block
+	i2c_bus.WriteRegBlocked(ADXL345, 0x31, 0x01, 2);	// 2ms block
 
-	Serial.println("Enable ADXL345 measurement: non-blocking SetReg");
+	Serial.println("Enable ADXL345 measurement: non-blocking WriteReg");
 	static uint8_t rtn1[10];	
-	i2c_bus.SetReg(accelerometer, ADXL345_PWR_CTL_RA, 0x08); // register address , EN_MEAS
-	while( !i2c_bus.SetRegIsFinished() );		// block when transmitting
+	i2c_bus.WriteReg(ADXL345, ADXL345_PWR_CTL_RA, 0x08); // register address , EN_MEAS
+	while( !i2c_bus.WriteRegIsFinished() );		// block when transmitting
 	Serial.println("ADXL345 set!");
 	Serial.println("---------------------");
 	delay(2000); // for ADXL345 to start (enable measurement)
@@ -84,16 +82,16 @@ void setup() {
 	Serial.println("Multi read");
 	delay(200); // for serial to write
 	
-	res = i2c_bus.GetReg(accelerometer, ADXL345_DATAX0, 6);
+	res = i2c_bus.ReadReg(ADXL345, ADXL345_DATAX0, 6);
 	Serial.print(res);
 	do{
-		res = i2c_bus.UpdateGetReg();
+		res = i2c_bus.UpdateReadReg();
 		//Serial.println(res);
 	}while(res<4);
 	
 	uint8_t rtn2[10];
 	Serial.print("fetch: ");
-	Serial.print( i2c_bus.FetchRegData(rtn2, 6) );
+	Serial.print( i2c_bus.FetchRegReadData(rtn2, 6) );
 	
 	for(int k=0;k<6;k++) {
 		Serial.print(rtn2[k], HEX);
@@ -121,7 +119,7 @@ void loop() {
 	
 	// read accel data
 	uint8_t rtn3[6];
-	if( i2c_bus.GetRegBlocked(accelerometer, ADXL345_DATAX0, 6, rtn3, 2) == 0)
+	if( i2c_bus.ReadRegBlocked(accelerometer, ADXL345_DATAX0, 6, rtn3, 2) == 0)
 	{
 		Serial.print("i: ");
 		
