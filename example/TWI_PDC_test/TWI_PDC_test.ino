@@ -155,6 +155,23 @@ void loop() {
 	Serial.print(", ");
 	Serial.print((float)az*8/1024);
 	Serial.println("] ");
+	
+	// read accel data with better method
+	uint8_t rtn5[10];
+	i2c.ReadFrom(ADXL234, data0_addr, rtn5, 6);
+	while( !i2c.RxComplete() );			// blocked while recieving
+	int16_t ax2 = (int16_t)rtn5[0] + ((int16_t)rtn5[1] << 8);
+	int16_t ay2 = (int16_t)rtn5[2] + ((int16_t)rtn5[3] << 8);
+	int16_t az2 = (int16_t)rtn5[4] + ((int16_t)rtn5[5] << 8);
+	Serial.print(i);
+	Serial.print(" Method 2 accel read: [");
+	Serial.print((float)ax2*8/1024);
+	Serial.print(", ");
+	Serial.print((float)ay2*8/1024);
+	Serial.print(", ");
+	Serial.print((float)az2*8/1024);
+	Serial.println("] ");
+
 
 }
 

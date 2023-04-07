@@ -119,7 +119,7 @@ void loop() {
 	
 	// read accel data
 	uint8_t rtn3[6];
-	if( i2c_bus.ReadRegBlocked(accelerometer, ADXL345_DATAX0, 6, rtn3, 2) == 0)
+	if( i2c_bus.ReadRegBlocked(ADXL345, ADXL345_DATAX0, 6, rtn3, 2) == 0)
 	{
 		Serial.print("i: ");
 		
